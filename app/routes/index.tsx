@@ -32,7 +32,7 @@ export default function Index() {
   return (
     <div className="flex flex-col h-full">
       <NavBar />
-      <main className="flex-auto mb-4">
+      <main className="flex-auto">
         <Outlet />
       </main>
     </div>
