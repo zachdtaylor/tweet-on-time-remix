@@ -2,8 +2,8 @@ import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
-import { twitterClient } from "../utils/twitter-client";
-
+import * as twitter from "../utils/twitter-client";
+import type { TwitterUser } from "../utils/twitter-client";
 import stylesUrl from "../styles/routes/index.css";
 
 export let meta: MetaFunction = () => {
@@ -17,26 +17,14 @@ export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
 };
 
-interface TwitterUser {
-  name: string;
-  screenName: string;
-  profileImage: string;
-  description: string;
-}
-
 interface IndexRouteData {
   user: TwitterUser;
 }
 
 export let loader: LoaderFunction = async () => {
-  const result = await twitterClient.get("account/verify_credentials");
+  const user = await twitter.getUser();
   return {
-    user: {
-      name: result.name,
-      screenName: result.screen_name,
-      profileImage: result.profile_image_url_https.replace("normal", "400x400"),
-      description: result.description,
-    },
+    user,
   };
 };
 
@@ -48,9 +36,6 @@ export default function Index() {
         <Outlet />
       </main>
     </div>
-    // <div className="md:m-auto md:max-w-3xl">
-    //   <section className="p-3 overflow-hidden m-auto"></section>
-    // </div>
   );
 }
 
@@ -71,10 +56,13 @@ function NavBar() {
         </div>
       </div>
       <ul
-        className={`my-3 mx-5 md:flex md:flex-row md:justify-end ${
+        className={`my-3 mx-5 md:flex md:flex-row md:justify-between ${
           mobileMenuActive ? "block" : "hidden"
         }`}
       >
+        <NavBarGroup>
+          <NavBarItem to="/">Home</NavBarItem>
+        </NavBarGroup>
         <NavBarGroup>
           <div>
             <p className="text-md">Hello, {data.user.name}</p>

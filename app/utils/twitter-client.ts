@@ -8,7 +8,7 @@ if (typeof process.env.CONSUMER_SECRET === "undefined") {
   throw new Error("Environment variable CONSUMER_SECRET must be set");
 }
 
-const twitterClient = new Twitter({
+export const twitterClient = new Twitter({
   subdomain: "api",
   version: "1.1",
   consumer_key: process.env.CONSUMER_KEY,
@@ -17,4 +17,19 @@ const twitterClient = new Twitter({
   access_token_secret: process.env.ACCESS_TOKEN_SECRET,
 });
 
-export { twitterClient };
+export interface TwitterUser {
+  name: string;
+  screenName: string;
+  profileImage: string;
+  description: string;
+}
+
+export async function getUser() {
+  const result = await twitterClient.get("account/verify_credentials");
+  return {
+    name: result.name,
+    screenName: result.screen_name,
+    profileImage: result.profile_image_url_https.replace("normal", "400x400"),
+    description: result.description,
+  };
+}
