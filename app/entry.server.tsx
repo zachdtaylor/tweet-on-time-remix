@@ -1,6 +1,9 @@
 import ReactDOMServer from "react-dom/server";
 import type { EntryContext } from "remix";
 import { RemixServer } from "remix";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export default function handleRequest(
   request: Request,
@@ -16,7 +19,7 @@ export default function handleRequest(
     status: responseStatusCode,
     headers: {
       ...Object.fromEntries(responseHeaders),
-      "Content-Type": "text/html"
-    }
+      "Content-Type": "text/html",
+    },
   });
 }

@@ -1,0 +1,5 @@
+.profile-image {
+  @apply max-h-16 rounded-full ml-6 cursor-pointer;
+  @apply border-2 border-darkblue hover:border-solid hover:border-twitterblue;
+  @apply transition duration-700 ease-out;
+}

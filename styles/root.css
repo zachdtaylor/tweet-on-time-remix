@@ -1,0 +1,16 @@
+html {
+  font-family: arial, helvetica;
+  font-size: 1.1875rem;
+  color: #e2e8f0;
+}
+
+body {
+  margin: 0;
+  background-color: #161f2b;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
