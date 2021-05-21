@@ -17,8 +17,13 @@ export let loader: LoaderFunction = ({ params }) => {
 export default function ScheduledTweet() {
   const data = useRouteData<Tweet>();
   return (
-    <div>
-      <h1>Tweet</h1>
+    <div className="w-full">
+      <div className="w-full flex flex-row justify-between">
+        <h1>Tweet</h1>
+        <p className="text-sm text-gray-400">
+          {data.tweetDate} at {data.tweetTime}
+        </p>
+      </div>
       <div className="mt-4">
         <TweetBox more={data.threadLength > 1}>{data.body}</TweetBox>
         {data.thread?.map(({ body }, index) => (
@@ -46,9 +51,9 @@ function TweetBox({ children, more }: TweetBoxProps) {
           alt="Profile image"
           className="max-h-12 rounded-full"
         />
-        {more && <div className="vl my-3"></div>}
+        {more && <div className="vl h-8 my-3"></div>}
       </div>
-      <p className="pl-2">{children}</p>
+      <p className="pl-3">{children}</p>
     </div>
   );
 }

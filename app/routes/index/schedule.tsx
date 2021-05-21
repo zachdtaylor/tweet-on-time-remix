@@ -27,7 +27,7 @@ export default function Index() {
           ))}
         </ul>
       </div>
-      <div className="p-4">
+      <div className="w-full p-4">
         <Outlet />
       </div>
     </div>
