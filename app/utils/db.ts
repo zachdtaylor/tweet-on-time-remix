@@ -27,7 +27,6 @@ export async function getTweet(id: string): Promise<Tweet> {
   const tweet = await db
     .collection("tweets")
     .findOne({ _id: new ObjectID(id) });
-  console.log(tweet);
   return { id: tweet._id, ...tweet };
 }
 
