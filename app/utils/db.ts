@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectID } from "mongodb";
 
 const connectToDB = async () => {
   const client = new MongoClient("mongodb://localhost:27017", {
@@ -16,10 +16,19 @@ export interface Tweet {
   thread?: { body: string }[];
 }
 
-export async function getAllTweets() {
+export async function getAllTweets(): Promise<Tweet[]> {
   const db = await connectToDB();
-  const tweets = await db.collection<Tweet>("tweets").find().toArray();
-  return tweets;
+  const tweets = await db.collection("tweets").find().toArray();
+  return tweets.map(({ _id, ...rest }) => ({ id: _id, ...rest }));
+}
+
+export async function getTweet(id: string): Promise<Tweet> {
+  const db = await connectToDB();
+  const tweet = await db
+    .collection("tweets")
+    .findOne({ _id: new ObjectID(id) });
+  console.log(tweet);
+  return { id: tweet._id, ...tweet };
 }
 
 export { connectToDB };

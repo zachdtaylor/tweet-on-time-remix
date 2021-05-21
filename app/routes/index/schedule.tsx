@@ -1,5 +1,4 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import type { LoaderFunction } from "remix";
 import { useRouteData } from "remix";
 import { getAllTweets } from "../../utils/db";
@@ -18,15 +17,19 @@ export default function Index() {
         <ul className="h-full border-r border-gray-700 overflow-scroll">
           {data.map((tweet) => (
             <li key={tweet.id} className="py-2 px-4 border-b border-gray-700">
-              <p className="text-xs">
-                {tweet.tweetDate} {tweet.tweetTime}
-              </p>
-              <p className="text-sm">{previewText(tweet.body)}</p>
+              <Link to={`${tweet.id}`}>
+                <p className="text-xs">
+                  {tweet.tweetDate} {tweet.tweetTime}
+                </p>
+                <p className="text-sm">{previewText(tweet.body)}</p>
+              </Link>
             </li>
           ))}
         </ul>
       </div>
-      <div className="p-4">Hello</div>
+      <div className="p-4">
+        <Outlet />
+      </div>
     </div>
   );
 }

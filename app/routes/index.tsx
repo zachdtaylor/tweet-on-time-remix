@@ -61,7 +61,7 @@ function NavBar() {
         }`}
       >
         <NavBarGroup>
-          <NavBarItem to="/">Home</NavBarItem>
+          <NavBarItem to="schedule">Schedule</NavBarItem>
         </NavBarGroup>
         <NavBarGroup>
           <div>
