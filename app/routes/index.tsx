@@ -5,6 +5,7 @@ import { useRouteData } from "remix";
 import * as twitter from "../utils/twitter-client";
 import type { TwitterUser } from "../utils/twitter-client";
 import stylesUrl from "../styles/routes/index.css";
+import { TwitterUserProvider } from "../context/twitter-user";
 
 export let meta: MetaFunction = () => {
   return {
@@ -29,13 +30,16 @@ export let loader: LoaderFunction = async () => {
 };
 
 export default function Index() {
+  const data = useRouteData<IndexRouteData>();
   return (
-    <div className="flex flex-col h-full">
-      <NavBar />
-      <main className="flex-auto">
-        <Outlet />
-      </main>
-    </div>
+    <TwitterUserProvider user={data.user}>
+      <div className="flex flex-col h-full">
+        <NavBar />
+        <main className="flex-auto">
+          <Outlet />
+        </main>
+      </div>
+    </TwitterUserProvider>
   );
 }
 
