@@ -12,7 +12,7 @@ export default function Index() {
   const data = useRouteData<Tweet[]>();
   return (
     <div className="h-full flex flex-row">
-      <div className="flex flex-col w-1/6">
+      <div className="flex flex-col flex-none w-1/3">
         <p className="py-2 px-4 border-b border-r border-gray-700">New</p>
         <ul className="h-full border-r border-gray-700 overflow-scroll">
           {data.map((tweet) => (
