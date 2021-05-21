@@ -1,6 +1,14 @@
-import { LoaderFunction, useRouteData } from "remix";
+import React from "react";
+import { useRouteData } from "remix";
+import type { LinksFunction, LoaderFunction } from "remix";
+import { useTwitterUser } from "../../../context/twitter-user";
 import type { Tweet } from "../../../utils/db";
 import { getTweet } from "../../../utils/db";
+import stylesUrl from "../../../styles/routes/schedule/$id.css";
+
+export let links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: stylesUrl }];
+};
 
 export let loader: LoaderFunction = ({ params }) => {
   return getTweet(params.id);
@@ -8,5 +16,39 @@ export let loader: LoaderFunction = ({ params }) => {
 
 export default function ScheduledTweet() {
   const data = useRouteData<Tweet>();
-  return <div>{data.body}</div>;
+  return (
+    <div>
+      <h1>Tweet</h1>
+      <div className="mt-4">
+        <TweetBox more={data.threadLength > 1}>{data.body}</TweetBox>
+        {data.thread?.map(({ body }, index) => (
+          <TweetBox key={body} more={data.threadLength > index + 2}>
+            {body}
+          </TweetBox>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+type TweetBoxProps = {
+  children: React.ReactNode;
+  more?: boolean;
+};
+
+function TweetBox({ children, more }: TweetBoxProps) {
+  const user = useTwitterUser();
+  return (
+    <div className="flex flex-row">
+      <div className="flex-none">
+        <img
+          src={user?.profileImage}
+          alt="Profile image"
+          className="max-h-12 rounded-full"
+        />
+        {more && <div className="vl my-3"></div>}
+      </div>
+      <p className="pl-2">{children}</p>
+    </div>
+  );
 }

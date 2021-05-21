@@ -1,0 +1,4 @@
+.vl {
+  @apply border-l-4 border-gray-700 h-6;
+  margin-left: 50%;
+}

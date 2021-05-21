@@ -14,12 +14,13 @@ export interface Tweet {
   tweetDate: string;
   tweetTime: string;
   thread?: { body: string }[];
+  threadLength: number;
 }
 
 export async function getAllTweets(): Promise<Tweet[]> {
   const db = await connectToDB();
   const tweets = await db.collection("tweets").find().toArray();
-  return tweets.map(({ _id, ...rest }) => ({ id: _id, ...rest }));
+  return tweets.map(sanitizeTweet);
 }
 
 export async function getTweet(id: string): Promise<Tweet> {
@@ -27,7 +28,15 @@ export async function getTweet(id: string): Promise<Tweet> {
   const tweet = await db
     .collection("tweets")
     .findOne({ _id: new ObjectID(id) });
-  return { id: tweet._id, ...tweet };
+  return sanitizeTweet(tweet);
+}
+
+function sanitizeTweet({ _id, ...rest }: any): Tweet {
+  return {
+    id: _id,
+    threadLength: rest.thread ? rest.thread.length + 1 : 1,
+    ...rest,
+  };
 }
 
 export { connectToDB };
