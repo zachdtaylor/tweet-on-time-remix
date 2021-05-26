@@ -60,7 +60,7 @@ function NavBar() {
         </div>
       </div>
       <ul
-        className={`my-3 mx-5 md:flex md:flex-row md:justify-between ${
+        className={`py-3 px-5 md:flex md:flex-row md:justify-between ${
           mobileMenuActive ? "block" : "hidden"
         }`}
       >

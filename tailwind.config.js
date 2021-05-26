@@ -11,6 +11,15 @@ module.exports = {
         darkblue: {
           DEFAULT: "#161f2b",
         },
+        primary: {
+          DEFAULT: "#11111e",
+        },
+        secondary: {
+          DEFAULT: "#0E66A1",
+        },
+        accent: {
+          DEFAULT: "#743BD1",
+        },
       },
     },
   },
