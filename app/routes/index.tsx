@@ -95,7 +95,7 @@ function NavBarItem({ to, exact, children }: NavBarItemProps) {
       <NavLink
         to={to}
         className="w-full text-md"
-        activeClassName="text-primary-dark"
+        activeClassName="border-b-2 border-white"
         end={exact}
       >
         {children}
