@@ -1,14 +1,25 @@
-import type { LinksFunction } from "remix";
+import { ActionFunction, LinksFunction, redirect } from "remix";
 import stylesUrl from "../../../styles/routes/schedule/new.css";
+import { writeTweet } from "../../../utils/db";
 
 export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
 };
 
+export let action: ActionFunction = async ({ request }) => {
+  const body = new URLSearchParams(await request.text());
+  writeTweet({
+    body: body.get("body") ?? "",
+    tweetDate: "2021-01-01",
+    tweetTime: "01:00",
+  });
+  return redirect("/schedule/new");
+};
+
 export default function New() {
   return (
     <div className="w-full">
-      <form>
+      <form method="post">
         <TweetControls bodyLength={1} showAddButton={true}>
           <textarea
             name="body"
@@ -16,6 +27,11 @@ export default function New() {
             placeholder="What's happening?"
           />
         </TweetControls>
+        <input
+          className="px-3 py-2 bg-twitterblue rounded-md cursor-pointer hover:bg-secondary transition"
+          type="submit"
+          value="Schedule"
+        />
       </form>
     </div>
   );

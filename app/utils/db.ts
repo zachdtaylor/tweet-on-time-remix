@@ -1,21 +1,24 @@
 import { MongoClient, ObjectID } from "mongodb";
 
-const connectToDB = async () => {
+export async function connectToDB() {
   const client = new MongoClient("mongodb://localhost:27017", {
     useUnifiedTopology: true,
   });
   await client.connect();
   return client.db("tweet-on-time");
-};
+}
 
-export interface Tweet {
-  id: string;
+export type UnsavedTweet = {
   body: string;
   tweetDate: string;
   tweetTime: string;
   thread?: { body: string }[];
+};
+
+export type Tweet = UnsavedTweet & {
+  id: string;
   threadLength: number;
-}
+};
 
 export async function getAllTweets(): Promise<Tweet[]> {
   const db = await connectToDB();
@@ -39,4 +42,8 @@ function sanitizeTweet({ _id, ...rest }: any): Tweet {
   };
 }
 
-export { connectToDB };
+export async function writeTweet(tweet: UnsavedTweet) {
+  const db = await connectToDB();
+  const { insertedId } = await db.collection("tweets").insertOne(tweet);
+  return insertedId;
+}
