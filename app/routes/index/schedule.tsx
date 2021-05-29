@@ -1,6 +1,11 @@
-import { NavLink, Outlet } from "react-router-dom";
+import {
+  NavLink,
+  Outlet,
+  useLocation,
+  useSearchParams,
+} from "react-router-dom";
 import type { LoaderFunction, LinksFunction } from "remix";
-import { useRouteData } from "remix";
+import { useRouteData, Form } from "remix";
 import { getAllTweets } from "../../utils/db";
 import type { Tweet } from "../../utils/db";
 import stylesUrl from "../../styles/routes/schedule.css";
@@ -9,28 +14,40 @@ export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
 };
 
-export let loader: LoaderFunction = async () => {
-  return await getAllTweets();
+export let loader: LoaderFunction = async ({ request }) => {
+  const search = new URLSearchParams(new URL(request.url).search);
+  return await getAllTweets(search.get("query"));
 };
 
-export default function Index() {
+export default function Schedule() {
   const data = useRouteData<Tweet[]>();
+  const location = useLocation();
+  const [params] = useSearchParams();
   return (
     <div className="h-full flex flex-row">
       <div className="flex flex-col flex-none w-1/4 border-r border-gray-700 p-3">
         <NavLink
-          to="new"
+          to={{ pathname: "new", search: location.search }}
           activeClassName="bg-twitterblue"
-          className="flex flex-row items-center py-2 px-4 menu-item cursor-pointer"
+          className="fixed bottom-3 right-3 p-3 rounded-full cursor-pointer bg-twitterblue"
         >
-          <PlusIcon />
-          <p className="pl-2">New</p>
+          <WriteIcon />
         </NavLink>
+        <Form className="flex flex-row items-center px-2 py-1">
+          <SearchIcon />
+          <input
+            type="text"
+            name="query"
+            className="w-full bg-primary ml-2 px-2 py-1 focus:outline-none"
+            placeholder="Search tweets..."
+            defaultValue={params.get("query") ?? undefined}
+          />
+        </Form>
         <ul className="h-full overflow-scroll">
           {data.map((tweet) => (
             <li key={tweet.id} className="my-2">
               <NavLink
-                to={tweet.id}
+                to={{ pathname: tweet.id, search: location.search }}
                 className="inline-block menu-item py-3 px-4"
                 activeClassName="bg-twitterblue"
               >
@@ -50,7 +67,7 @@ export default function Index() {
   );
 }
 
-function PlusIcon() {
+function WriteIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +80,26 @@ function PlusIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}
-        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+      />
+    </svg>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
       />
     </svg>
   );

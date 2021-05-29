@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { LinkProps, NavLink, Outlet, useLocation } from "react-router-dom";
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
 import * as twitter from "../utils/twitter-client";
@@ -45,6 +45,7 @@ export default function Index() {
 
 function NavBar() {
   const data = useRouteData<IndexRouteData>();
+  const location = useLocation();
   const [mobileMenuActive, setMobileMenuActive] = React.useState(false);
   return (
     <nav className="mx-auto w-full border-b-2 border-gray-800">
@@ -65,7 +66,9 @@ function NavBar() {
         }`}
       >
         <NavBarGroup>
-          <NavBarItem to="schedule">Schedule</NavBarItem>
+          <NavBarItem to={{ pathname: "schedule", search: location.search }}>
+            Schedule
+          </NavBarItem>
         </NavBarGroup>
         <NavBarGroup>
           <div>
@@ -83,23 +86,14 @@ function NavBar() {
   );
 }
 
-interface NavBarItemProps {
-  to: string;
-  exact?: boolean;
-  children: React.ReactNode;
-}
-
-function NavBarItem({ to, exact, children }: NavBarItemProps) {
+function NavBarItem(props: LinkProps) {
   return (
     <li className="py-4 border-b-2 md:mx-4 md:py-2 md:border-b-0 hover:text-primary-dark transition duration-200 ease-in-out">
       <NavLink
-        to={to}
+        {...props}
         className="w-full text-md"
         activeClassName="border-b-2 border-white"
-        end={exact}
-      >
-        {children}
-      </NavLink>
+      />
     </li>
   );
 }
