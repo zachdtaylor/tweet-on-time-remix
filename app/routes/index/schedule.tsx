@@ -14,9 +14,9 @@ export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
 };
 
-export let loader: LoaderFunction = async ({ request }) => {
+export let loader: LoaderFunction = ({ request }) => {
   const search = new URLSearchParams(new URL(request.url).search);
-  return await getAllTweets(search.get("query"));
+  return getAllTweets(search.get("query"));
 };
 
 export default function Schedule() {

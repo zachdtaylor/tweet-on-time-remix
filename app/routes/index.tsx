@@ -1,5 +1,5 @@
 import React from "react";
-import { LinkProps, NavLink, Outlet, useLocation } from "react-router-dom";
+import { LinkProps, NavLink, Outlet } from "react-router-dom";
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
 import * as twitter from "../utils/twitter-client";
@@ -45,7 +45,6 @@ export default function Index() {
 
 function NavBar() {
   const data = useRouteData<IndexRouteData>();
-  const location = useLocation();
   const [mobileMenuActive, setMobileMenuActive] = React.useState(false);
   return (
     <nav className="mx-auto w-full border-b-2 border-gray-800">
@@ -66,20 +65,20 @@ function NavBar() {
         }`}
       >
         <NavBarGroup>
-          <NavBarItem to={{ pathname: "schedule", search: location.search }}>
-            Schedule
-          </NavBarItem>
+          <NavBarItem to={{ pathname: "schedule" }}>Schedule</NavBarItem>
         </NavBarGroup>
         <NavBarGroup>
           <div>
             <p className="text-md">Hello, {data.user.name}</p>
             <p className="text-xs">@{data.user.screenName}</p>
           </div>
-          <img
-            src={data.user.profileImage}
-            alt="Twitter profile image"
-            className="profile-image"
-          />
+          <form>
+            <img
+              src={data.user.profileImage}
+              alt="Twitter profile image"
+              className="profile-image"
+            />
+          </form>
         </NavBarGroup>
       </ul>
     </nav>
