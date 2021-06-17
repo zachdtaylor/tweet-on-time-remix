@@ -4,7 +4,7 @@ import {
   useLocation,
   useSearchParams,
 } from "react-router-dom";
-import type { LoaderFunction, LinksFunction } from "remix";
+import { LoaderFunction, LinksFunction, usePendingFormSubmit } from "remix";
 import { useRouteData, Form } from "remix";
 import { getAllTweets } from "../../utils/db";
 import type { Tweet } from "../../utils/db";
@@ -23,6 +23,8 @@ export default function Schedule() {
   const data = useRouteData<Tweet[]>();
   const location = useLocation();
   const [params] = useSearchParams();
+  const pendingForm = usePendingFormSubmit();
+
   return (
     <div className="h-full flex flex-row">
       <div className="flex flex-col flex-none w-1/4 border-r border-gray-700 p-3">
@@ -33,7 +35,11 @@ export default function Schedule() {
         >
           <WriteIcon />
         </NavLink>
-        <Form className="flex flex-row items-center px-2 py-1">
+        <Form
+          onSubmit={(event) => (!!pendingForm ? event.preventDefault() : null)}
+          action={location.pathname}
+          className="flex flex-row items-center px-2 py-1"
+        >
           <SearchIcon />
           <input
             type="text"
