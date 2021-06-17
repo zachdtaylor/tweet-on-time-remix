@@ -9,12 +9,24 @@ import { useRouteData, Form } from "remix";
 import { getAllTweets } from "../../utils/db";
 import type { Tweet } from "../../utils/db";
 import stylesUrl from "../../styles/routes/schedule.css";
+import shimmerUrl from "../../styles/shimmer.css";
+import { LoadingTweetShimmer } from "../../components";
 
 export let links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: stylesUrl }];
+  return [
+    { rel: "stylesheet", href: stylesUrl },
+    { rel: "stylesheet", href: shimmerUrl },
+  ];
 };
 
-export let loader: LoaderFunction = ({ request }) => {
+function sleep(ms: number) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, ms);
+  });
+}
+
+export let loader: LoaderFunction = async ({ request }) => {
+  await sleep(4000);
   const search = new URLSearchParams(new URL(request.url).search);
   return getAllTweets(search.get("query"));
 };
@@ -24,6 +36,7 @@ export default function Schedule() {
   const location = useLocation();
   const [params] = useSearchParams();
   const pendingForm = usePendingFormSubmit();
+  const pending = !!pendingForm;
 
   return (
     <div className="h-full flex flex-row">
@@ -36,7 +49,7 @@ export default function Schedule() {
           <WriteIcon />
         </NavLink>
         <Form
-          onSubmit={(event) => (!!pendingForm ? event.preventDefault() : null)}
+          onSubmit={(event) => (pending ? event.preventDefault() : null)}
           action={location.pathname}
           className="flex flex-row items-center px-2 py-1"
         >
@@ -50,20 +63,31 @@ export default function Schedule() {
           />
         </Form>
         <ul className="h-full overflow-scroll">
-          {data.map((tweet) => (
-            <li key={tweet.id} className="my-2">
-              <NavLink
-                to={{ pathname: tweet.id, search: location.search }}
-                className="inline-block menu-item py-3 px-4"
-                activeClassName="bg-twitterblue"
-              >
-                <p className="text-xs pb-1">
-                  {tweet.tweetDate} {tweet.tweetTime}
-                </p>
-                <p className="text-sm">{previewText(tweet.body)}</p>
-              </NavLink>
-            </li>
-          ))}
+          {pending ? (
+            <>
+              <li>
+                <LoadingTweetShimmer />
+              </li>
+              <li>
+                <LoadingTweetShimmer />
+              </li>
+            </>
+          ) : (
+            data.map((tweet) => (
+              <li key={tweet.id} className="my-2">
+                <NavLink
+                  to={{ pathname: tweet.id, search: location.search }}
+                  className="inline-block menu-item py-3 px-4"
+                  activeClassName="bg-twitterblue"
+                >
+                  <p className="text-xs pb-1">
+                    {tweet.tweetDate} {tweet.tweetTime}
+                  </p>
+                  <p className="text-sm">{previewText(tweet.body)}</p>
+                </NavLink>
+              </li>
+            ))
+          )}
         </ul>
       </div>
       <div className="w-full p-4">

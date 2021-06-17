@@ -1,4 +1,4 @@
-import { ActionFunction, LinksFunction, redirect } from "remix";
+import { ActionFunction, Link, LinksFunction, redirect } from "remix";
 import stylesUrl from "../../../styles/routes/schedule/new.css";
 import { writeTweet } from "../../../utils/db";
 
@@ -18,33 +18,38 @@ export let action: ActionFunction = async ({ request }) => {
 
 export default function New() {
   return (
-    <div className="w-full">
-      <form method="post">
-        <TweetControls bodyLength={1} showAddButton={true}>
-          <textarea
-            name="body"
-            className="w-full h-44 p-4 resize-none"
-            placeholder="What's happening?"
-          />
-        </TweetControls>
-        <div className="my-2">
-          <input
-            name="tweetDate"
-            type="date"
-            className="bg-primary px-2 py-1"
-          />
-          <input
-            name="tweetTime"
-            type="time"
-            className="bg-primary px-2 py-1"
-          />
+    <div className="absolute z-10 top-0 left-0 w-full h-full lg:px-32 lg:py-24 bg-gray-600 bg-opacity-50">
+      <div className="bg-primary p-6 rounded-md">
+        <div className="inline">
+          <CloseButton />
         </div>
-        <input
-          className="px-3 py-2 bg-twitterblue rounded-md cursor-pointer hover:bg-secondary transition"
-          type="submit"
-          value="Schedule"
-        />
-      </form>
+        <form method="post">
+          <TweetControls bodyLength={1} showAddButton={true}>
+            <textarea
+              name="body"
+              className="w-full h-44 p-4 resize-none"
+              placeholder="What's happening?"
+            />
+          </TweetControls>
+          <div className="my-2">
+            <input
+              name="tweetDate"
+              type="date"
+              className="bg-primary px-2 py-1"
+            />
+            <input
+              name="tweetTime"
+              type="time"
+              className="bg-primary px-2 py-1"
+            />
+          </div>
+          <input
+            className="px-3 py-2 bg-twitterblue rounded-md cursor-pointer hover:bg-secondary transition"
+            type="submit"
+            value="Schedule"
+          />
+        </form>
+      </div>
     </div>
   );
 }
@@ -103,5 +108,26 @@ function AddButton({ onClick }: AddButtonProps) {
         d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
       />
     </svg>
+  );
+}
+
+function CloseButton() {
+  return (
+    <Link to=".." replace>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </Link>
   );
 }
