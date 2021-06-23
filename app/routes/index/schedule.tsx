@@ -26,7 +26,6 @@ function sleep(ms: number) {
 }
 
 export let loader: LoaderFunction = async ({ request }) => {
-  await sleep(4000);
   const search = new URLSearchParams(new URL(request.url).search);
   return getAllTweets(search.get("query"));
 };
