@@ -1,5 +1,5 @@
 import React from "react";
-import { LinkProps, NavLink, Outlet } from "react-router-dom";
+import { NavLinkProps, NavLink, Outlet } from "react-router-dom";
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
 import * as twitter from "../utils/twitter-client";
@@ -65,7 +65,10 @@ function NavBar() {
         }`}
       >
         <NavBarGroup>
-          <NavBarItem to={{ pathname: "schedule" }}>Schedule</NavBarItem>
+          <NavBarItem to="/" end>
+            Home
+          </NavBarItem>
+          <NavBarItem to="schedule">Schedule</NavBarItem>
         </NavBarGroup>
         <NavBarGroup>
           <div>
@@ -85,7 +88,7 @@ function NavBar() {
   );
 }
 
-function NavBarItem(props: LinkProps) {
+function NavBarItem(props: NavLinkProps) {
   return (
     <li className="py-4 border-b-2 md:mx-4 md:py-2 md:border-b-0 hover:text-primary-dark transition duration-200 ease-in-out">
       <NavLink
