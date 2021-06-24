@@ -71,6 +71,10 @@ export default function Schedule() {
                 <LoadingTweetShimmer />
               </li>
             </>
+          ) : data.length === 0 ? (
+            <li className="my-4 text-gray-400">
+              <p className="m-auto w-min whitespace-nowrap">No Tweets</p>
+            </li>
           ) : (
             data.map((tweet) => (
               <li key={tweet.id} className="my-2">
