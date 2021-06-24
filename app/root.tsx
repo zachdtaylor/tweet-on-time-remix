@@ -1,5 +1,5 @@
-import type { LinksFunction, LoaderFunction } from "remix";
-import { Meta, Links, Scripts, useRouteData, LiveReload } from "remix";
+import type { LinksFunction } from "remix";
+import { Meta, Links, Scripts, LiveReload } from "remix";
 import { Outlet } from "react-router-dom";
 
 import tailwindUrl from "./styles/tailwind.css";
