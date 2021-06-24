@@ -8,6 +8,7 @@
     "dev": "remix run",
     "deploy": "flyctl deploy --build-arg REMIX_TOKEN=${REMIX_TOKEN}",
     "start": "remix-serve build",
+    "watch:tailwind": "tailwindcss --output ./app/styles/tailwind.css -w",
     "watch:css": "postcss styles --base styles --dir app/styles -w",
     "build:css": "postcss styles --base styles --dir app/styles --env production"
   },
