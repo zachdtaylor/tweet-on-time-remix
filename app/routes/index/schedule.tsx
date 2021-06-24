@@ -9,7 +9,7 @@ import { useRouteData, Form } from "remix";
 import { getAllTweets } from "../../utils/db";
 import type { Tweet } from "../../utils/db";
 import stylesUrl from "../../styles/routes/schedule.css";
-import { LoadingTweetShimmer } from "../../components";
+import { LoadingTweetShimmer, WriteIcon } from "../../components";
 
 export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
@@ -24,7 +24,7 @@ function sleep(ms: number) {
 export let loader: LoaderFunction = async ({ request }) => {
   // await sleep(3000);
   const search = new URLSearchParams(new URL(request.url).search);
-  return getAllTweets(search.get("query"));
+  return getAllTweets(search.get("query") ?? undefined);
 };
 
 export default function Schedule() {
@@ -97,25 +97,6 @@ export default function Schedule() {
         <Outlet />
       </div>
     </div>
-  );
-}
-
-function WriteIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-      />
-    </svg>
   );
 }
 

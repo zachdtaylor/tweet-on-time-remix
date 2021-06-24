@@ -20,7 +20,7 @@ export type Tweet = UnsavedTweet & {
   threadLength: number;
 };
 
-export async function getAllTweets(query: string | null): Promise<Tweet[]> {
+export async function getAllTweets(query?: string): Promise<Tweet[]> {
   const dbQuery = query ? { body: new RegExp(query, "i") } : {};
   const db = await connectToDB();
   const tweets = await db.collection("tweets").find(dbQuery).toArray();
