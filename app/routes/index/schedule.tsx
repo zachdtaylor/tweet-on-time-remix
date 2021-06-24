@@ -9,14 +9,10 @@ import { useRouteData, Form } from "remix";
 import { getAllTweets } from "../../utils/db";
 import type { Tweet } from "../../utils/db";
 import stylesUrl from "../../styles/routes/schedule.css";
-import shimmerUrl from "../../styles/shimmer.css";
 import { LoadingTweetShimmer } from "../../components";
 
 export let links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: stylesUrl },
-    { rel: "stylesheet", href: shimmerUrl },
-  ];
+  return [{ rel: "stylesheet", href: stylesUrl }];
 };
 
 function sleep(ms: number) {
@@ -26,6 +22,7 @@ function sleep(ms: number) {
 }
 
 export let loader: LoaderFunction = async ({ request }) => {
+  // await sleep(3000);
   const search = new URLSearchParams(new URL(request.url).search);
   return getAllTweets(search.get("query"));
 };
@@ -64,6 +61,9 @@ export default function Schedule() {
         <ul className="h-full overflow-scroll">
           {pending ? (
             <>
+              <li>
+                <LoadingTweetShimmer />
+              </li>
               <li>
                 <LoadingTweetShimmer />
               </li>

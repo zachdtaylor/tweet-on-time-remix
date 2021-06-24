@@ -5,7 +5,7 @@ type ShimmerCommentProps = {
 function ShimmerComment({ length }: ShimmerCommentProps) {
   return (
     <div
-      className={`h-1 bg-gray-100 mt-5 animate-shimmer rounded-md ${
+      className={`h-2 bg-gray-400 mt-5 rounded-sm ${
         length === "short" ? "w-1/4" : length === "medium" ? "w-1/2" : ""
       }`}
     ></div>
