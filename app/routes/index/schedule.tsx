@@ -7,7 +7,7 @@ import {
 import { LoaderFunction, LinksFunction, usePendingFormSubmit } from "remix";
 import { useRouteData, Form } from "remix";
 import { getAllTweets } from "../../utils/db";
-import type { Tweet } from "../../utils/db";
+import type { ScheduledTweet } from "../../utils/db";
 import stylesUrl from "../../styles/routes/schedule.css";
 import { LoadingTweetShimmer, WriteIcon } from "../../components";
 
@@ -28,7 +28,7 @@ export let loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function Schedule() {
-  const data = useRouteData<Tweet[]>();
+  const data = useRouteData<ScheduledTweet[]>();
   const location = useLocation();
   const [params] = useSearchParams();
   const pendingForm = usePendingFormSubmit();

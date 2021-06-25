@@ -2,7 +2,7 @@ import React from "react";
 import { useRouteData } from "remix";
 import type { LinksFunction, LoaderFunction } from "remix";
 import { useTwitterUser } from "../../../context/twitter-user";
-import type { Tweet } from "../../../utils/db";
+import type { ScheduledTweet } from "../../../utils/db";
 import { getTweet } from "../../../utils/db";
 import stylesUrl from "../../../styles/routes/schedule/$id.css";
 
@@ -15,7 +15,7 @@ export let loader: LoaderFunction = ({ params }) => {
 };
 
 export default function ScheduledTweet() {
-  const data = useRouteData<Tweet>();
+  const data = useRouteData<ScheduledTweet>();
   return (
     <div className="w-full">
       <div className="w-full flex flex-row justify-between">

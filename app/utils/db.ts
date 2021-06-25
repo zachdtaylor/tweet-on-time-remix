@@ -15,19 +15,19 @@ export type UnsavedTweet = {
   thread?: { body: string }[];
 };
 
-export type Tweet = UnsavedTweet & {
+export type ScheduledTweet = UnsavedTweet & {
   id: string;
   threadLength: number;
 };
 
-export async function getAllTweets(query?: string): Promise<Tweet[]> {
+export async function getAllTweets(query?: string): Promise<ScheduledTweet[]> {
   const dbQuery = query ? { body: new RegExp(query, "i") } : {};
   const db = await connectToDB();
   const tweets = await db.collection("tweets").find(dbQuery).toArray();
   return tweets.map(sanitizeTweet);
 }
 
-export async function getTweet(id: string): Promise<Tweet> {
+export async function getTweet(id: string): Promise<ScheduledTweet> {
   const db = await connectToDB();
   const tweet = await db
     .collection("tweets")
@@ -35,7 +35,7 @@ export async function getTweet(id: string): Promise<Tweet> {
   return sanitizeTweet(tweet);
 }
 
-function sanitizeTweet({ _id, ...rest }: any): Tweet {
+function sanitizeTweet({ _id, ...rest }: any): ScheduledTweet {
   return {
     id: _id,
     threadLength: rest.thread ? rest.thread.length + 1 : 1,
