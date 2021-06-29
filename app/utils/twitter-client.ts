@@ -34,12 +34,6 @@ export async function getUser() {
   };
 }
 
-export async function getUserTimeline(screenName: string) {
-  const result = await twitterClient.get("statuses/user_timeline", {
-    screen_name: screenName,
-    exclude_replies: false,
-    since_id: 1407738466486526000,
-  });
-  console.log(result);
-  return result;
+export async function getUserTimeline(options: { screen_name: string }) {
+  return twitterClient.get("statuses/user_timeline", options);
 }

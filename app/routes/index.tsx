@@ -24,7 +24,6 @@ interface IndexRouteData {
 
 export let loader: LoaderFunction = async () => {
   const user = await twitter.getUser();
-  const statuses = await twitter.getUserTimeline(user.screenName);
   return {
     user,
   };

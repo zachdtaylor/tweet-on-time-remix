@@ -2,6 +2,7 @@ import { MetaFunction, LoaderFunction, Link } from "remix";
 import { useRouteData } from "remix";
 import { ArrowUp, WriteIcon } from "../../components";
 import { getAllTweets } from "../../utils/db";
+import * as twitter from "../../utils/twitter-client";
 
 export let meta: MetaFunction = () => {
   return {
@@ -10,9 +11,12 @@ export let meta: MetaFunction = () => {
   };
 };
 
-export let loader: LoaderFunction = async () => {
+export let loader: LoaderFunction = async (props) => {
+  const statuses = await twitter.getUserTimeline({
+    screen_name: "_zachdtaylor",
+  });
   return {
-    tweetsSentThisWeek: 0,
+    tweetsSentThisWeek: statuses.length,
     scheduledTweetCount: (await getAllTweets()).length,
   };
 };
