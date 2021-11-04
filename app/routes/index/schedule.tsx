@@ -39,8 +39,11 @@ export default function Schedule() {
       <div className="flex flex-col flex-none w-1/4 border-r border-gray-700 p-3">
         <NavLink
           to={{ pathname: "new", search: location.search }}
-          activeClassName="bg-twitterblue"
-          className="fixed bottom-3 right-3 p-3 rounded-full cursor-pointer bg-twitterblue"
+          className={(isActive) =>
+            `fixed bottom-3 right-3 p-3 rounded-full cursor-pointer bg-twitterblue ${
+              isActive && "bg-twitterblue"
+            }`
+          }
         >
           <WriteIcon />
         </NavLink>
@@ -80,8 +83,11 @@ export default function Schedule() {
               <li key={tweet.id} className="my-2">
                 <NavLink
                   to={{ pathname: tweet.id, search: location.search }}
-                  className="inline-block menu-item py-3 px-4"
-                  activeClassName="bg-twitterblue"
+                  className={(isActive) =>
+                    `inline-block menu-item py-3 px-4 ${
+                      isActive && "bg-twitterblue"
+                    }`
+                  }
                 >
                   <p className="text-xs pb-1">
                     {tweet.tweetDate} {tweet.tweetTime}
