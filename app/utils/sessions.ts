@@ -3,7 +3,7 @@ import { createCookieSessionStorage } from "@remix-run/server-runtime";
 const { getSession, commitSession, destroySession } =
   createCookieSessionStorage({
     cookie: {
-      name: "__tweet_on_time_session",
+      name: "tweet_on_time_session",
 
       // all of these are optional
       // domain: "remix.run",

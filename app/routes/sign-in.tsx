@@ -38,7 +38,7 @@ export default function Index() {
   return (
     <main className="h-full relative">
       <Form method="post" className="absolute top-1/4 w-full">
-        <div className="w-1/3 m-auto bg-gray-700 p-5 rounded-md">
+        <div className="w-11/12 md:w-1/3 m-auto bg-gray-700 p-5 rounded-md">
           <h1 className="text-center text-2xl mb-5">Tweet on Time</h1>
           <button type="submit" className="w-full">
             <img src="/sign-in-with-twitter-gray.png" className="m-auto" />
