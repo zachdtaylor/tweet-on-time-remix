@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "remix setup",
     "build": "remix build",
-    "dev": "remix run",
+    "dev": "remix dev",
     "deploy": "flyctl deploy --build-arg REMIX_TOKEN=${REMIX_TOKEN}",
     "start": "remix-serve build",
     "watch:tailwind": "tailwindcss --output ./app/styles/tailwind.css -w",
@@ -15,20 +15,19 @@
   },
   "dependencies": {
     "@prisma/client": "^3.4.0",
-    "@remix-run/node": "0.17.0",
-    "@remix-run/react": "0.17.0",
-    "@remix-run/serve": "0.17.0",
+    "@remix-run/react": "^0.20.1",
+    "@remix-run/serve": "^0.20.1",
     "dotenv": "^9.0.2",
     "mongodb": "^3.6.7",
     "mongodb-client-encryption": "^1.2.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^6.0.0-beta.0",
-    "remix": "0.17.0",
+    "remix": "^0.20.1",
     "twitter-lite": "^1.1.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "0.17.0",
+    "@remix-run/dev": "^0.20.1",
     "@types/mongodb": "^3.6.13",
     "@types/react": "^17.0.1",
     "@types/react-dom": "^17.0.0",
