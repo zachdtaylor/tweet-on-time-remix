@@ -4,12 +4,11 @@ import {
   useLocation,
   useSearchParams,
 } from "react-router-dom";
-import { LoaderFunction, LinksFunction, usePendingFormSubmit } from "remix";
-import { useRouteData, Form } from "remix";
+import { LoaderFunction, LinksFunction, useTransition } from "remix";
+import { useLoaderData, Form } from "remix";
 import { getAllTweets } from "../../utils/db";
-import type { ScheduledTweet } from "../../utils/db";
-import stylesUrl from "../../styles/routes/schedule.css";
 import { LoadingTweetShimmer, WriteIcon } from "../../components";
+import stylesUrl from "../../styles/routes/schedule.css";
 
 export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
@@ -28,11 +27,11 @@ export let loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function Schedule() {
-  const data = useRouteData<ScheduledTweet[]>();
+  const data = useLoaderData();
   const location = useLocation();
   const [params] = useSearchParams();
-  const pendingForm = usePendingFormSubmit();
-  const pending = !!pendingForm;
+  const transition = useTransition();
+  const pending = !!transition.submission;
 
   return (
     <div className="h-full flex flex-row">
