@@ -8,11 +8,10 @@ export let links: LinksFunction = () => {
 
 export let action: ActionFunction = async ({ request }) => {
   const body = new URLSearchParams(await request.text());
-  writeTweet({
-    body: body.get("body") ?? "",
-    tweetDate: "2021-01-01",
-    tweetTime: "01:00",
-  });
+  // writeTweet({
+  //   body: body.get("body") ?? "",
+  //   sendAt: new Date(2021, 0, 1, 12, 0, 0),
+  // });
   return redirect("/schedule/new");
 };
 
