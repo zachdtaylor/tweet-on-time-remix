@@ -36,12 +36,15 @@ export let action: ActionFunction = async () => {
 
 export default function Index() {
   return (
-    <div className="flex flex-col h-full">
-      <main className="flex-auto">
-        <Form method="post">
-          <button type="submit">Sign in with Twitter</button>
-        </Form>
-      </main>
-    </div>
+    <main className="h-full relative">
+      <Form method="post" className="absolute top-1/4 w-full">
+        <div className="w-1/3 m-auto bg-gray-700 p-5 rounded-md">
+          <h1 className="text-center text-2xl mb-5">Tweet on Time</h1>
+          <button type="submit" className="w-full">
+            <img src="/sign-in-with-twitter-gray.png" className="m-auto" />
+          </button>
+        </div>
+      </Form>
+    </main>
   );
 }
