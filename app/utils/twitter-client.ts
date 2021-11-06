@@ -37,3 +37,15 @@ export async function getUser() {
 export async function getUserTimeline(options: { screen_name: string }) {
   return twitterClient.get("statuses/user_timeline", options);
 }
+
+export const twitterClient2 = new Twitter({
+  consumer_key: process.env.CONSUMER_KEY,
+  consumer_secret: process.env.CONSUMER_SECRET,
+});
+
+export async function getRequestToken() {
+  return twitterClient2.getRequestToken("http://localhost:3000").then((res) => {
+    console.log(res);
+    return res;
+  });
+}
