@@ -15,10 +15,11 @@ export async function getAllTweets(userId: number, query?: string) {
   });
 }
 
-export async function getTweet(id: number) {
-  return prisma.tweet.findUnique({
+export async function getTweet(userId: number, id: number) {
+  return prisma.tweet.findFirst({
     where: {
       id: id,
+      userId: userId,
     },
   });
 }
