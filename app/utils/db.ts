@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import type { Prisma, Session } from "@prisma/client";
+import type { Prisma, Session, User } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -27,14 +27,15 @@ export async function writeTweet(tweet: Prisma.TweetCreateInput) {
 
 const sessionExpirationTime = 1000 * 60 * 60 * 24 * 365;
 
-export async function getOrCreateUser(twitterUserId: string) {
-  let user = await prisma.user.findUnique({
-    where: { twitterUserId: twitterUserId },
+export async function updateUserOauthData(userData: Omit<User, "id">) {
+  return prisma.user.upsert({
+    where: { twitterUserId: userData.twitterUserId },
+    update: {
+      oauthToken: userData.oauthToken,
+      oauthTokenSecret: userData.oauthTokenSecret,
+    },
+    create: userData,
   });
-  if (user) {
-    return user;
-  }
-  return prisma.user.create({ data: { twitterUserId } });
 }
 
 export async function createSession(

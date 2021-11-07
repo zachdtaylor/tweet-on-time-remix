@@ -1,6 +1,8 @@
 import { createCookieSessionStorage } from "remix";
 import { getRequiredEnvVar } from "./misc";
 
+const sessionIdKey = "__session_id_key__";
+
 const { getSession, commitSession, destroySession } =
   createCookieSessionStorage({
     cookie: {

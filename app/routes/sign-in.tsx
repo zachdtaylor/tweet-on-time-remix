@@ -9,7 +9,7 @@ import {
 import * as twitter from "../utils/twitter-client";
 import stylesUrl from "../styles/routes/index.css";
 import { getSession, commitSession } from "~/utils/sessions";
-import { createSession, getOrCreateUser } from "~/utils/db";
+import { createSession, updateUserOauthData } from "~/utils/db";
 
 export let meta: MetaFunction = () => {
   return {
@@ -51,11 +51,13 @@ export let loader: LoaderFunction = async ({ request }) => {
       oauth_token: oauth.token,
       oauth_verifier: oauth.verifier,
     });
-    const user = await getOrCreateUser(res.user_id);
-    createSession({
-      userId: user.id,
+    const user = await updateUserOauthData({
+      twitterUserId: res.user_id,
       oauthToken: res.oauth_token,
       oauthTokenSecret: res.oauth_token_secret,
+    });
+    await createSession({
+      userId: user.id,
     });
     session.set("userId", user.id);
     return redirect("/", {
