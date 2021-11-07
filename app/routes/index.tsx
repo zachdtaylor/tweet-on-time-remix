@@ -3,6 +3,7 @@ import { useLoaderData, Link, redirect } from "remix";
 import { ArrowUp, WriteIcon } from "../components";
 import { getAllTweets } from "../utils/db";
 import { getSession } from "~/utils/sessions";
+import { protectedRoute } from "~/utils/misc";
 
 export let meta: MetaFunction = () => {
   return {
@@ -12,15 +13,10 @@ export let meta: MetaFunction = () => {
 };
 
 export let loader: LoaderFunction = async ({ request }) => {
-  const session = await getSession(request);
-  const user = await session.getUser();
-  if (!user) {
-    return redirect("/sign-in");
-  }
-  return {
+  return protectedRoute(request, async ({ user }) => ({
     tweetsSentThisWeek: 0,
     scheduledTweetCount: (await getAllTweets(user.id)).length,
-  };
+  }));
 };
 
 export default function Index() {

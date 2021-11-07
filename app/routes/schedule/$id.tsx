@@ -5,18 +5,16 @@ import { useTwitterUser } from "../../context/twitter-user";
 import { getTweet } from "../../utils/db";
 import stylesUrl from "../../../styles/routes/schedule/$id.css";
 import { getSession } from "~/utils/sessions";
+import { protectedRoute } from "~/utils/misc";
 
 export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
 };
 
 export let loader: LoaderFunction = async ({ params, request }) => {
-  const session = await getSession(request);
-  const user = await session.getUser();
-  if (!user) {
-    return redirect("/sign-in");
-  }
-  return getTweet(user.id, parseInt(params.id || ""));
+  return protectedRoute(request, ({ user }) =>
+    getTweet(user.id, parseInt(params.id || ""))
+  );
 };
 
 export default function ScheduledTweet() {

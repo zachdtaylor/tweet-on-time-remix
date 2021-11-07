@@ -3,6 +3,7 @@ import type { User } from "@prisma/client";
 import { createCookieSessionStorage } from "remix";
 import { createSession, getUserFromSessionId } from "~/utils/db";
 import { getRequiredEnvVar } from "./misc";
+import { Awaited } from "./types";
 
 const sessionIdKey = "__session_id_key__";
 
@@ -51,5 +52,7 @@ async function getSession(request: Request) {
     },
   };
 }
+
+export type UserSession = Awaited<ReturnType<typeof getSession>>;
 
 export { getSession, commitSession, destroySession };

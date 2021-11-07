@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import type { Prisma, Session, User } from "@prisma/client";
 import { getTwitterClient, verifyCredentials } from "./twitter-client";
+import { Awaited } from "./types";
 
 const prisma = new PrismaClient();
 
@@ -71,3 +72,5 @@ export async function getUserFromSessionId(sessionId: number) {
     twitterData,
   };
 }
+
+export type SignedInUser = Awaited<ReturnType<typeof getUserFromSessionId>>;
