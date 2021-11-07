@@ -32,8 +32,6 @@ model Session {
 
 model User {
   id            Int       @id @default(autoincrement())
-  email         String    @unique
-  name          String?
   twitterUserId String    @unique
   tweets        Tweet[]
   sessions      Session[]

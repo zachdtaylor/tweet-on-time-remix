@@ -8,7 +8,8 @@ import {
 } from "remix";
 import * as twitter from "../utils/twitter-client";
 import stylesUrl from "../styles/routes/index.css";
-import { getSession } from "~/utils/sessions";
+import { getSession, commitSession } from "~/utils/sessions";
+import { createSession, getOrCreateUser } from "~/utils/db";
 
 export let meta: MetaFunction = () => {
   return {
@@ -21,12 +22,15 @@ export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
 };
 
-function comingFromAuthenticate(request: Request) {
+function getOauthParams(request: Request) {
   const url = new URL(request.url);
   const params = new URLSearchParams(url.search);
   const token = params.get("oauth_token");
   const verifier = params.get("oauth_verifier");
-  return token !== null && verifier !== null;
+  if (token !== null && verifier !== null) {
+    return { token, verifier };
+  }
+  return null;
 }
 
 // Situations:
@@ -41,24 +45,24 @@ export let loader: LoaderFunction = async ({ request }) => {
   }
 
   // Case 2 - coming from authentication callback
-  if (comingFromAuthenticate(request)) {
-    const url = new URL(request.url);
-    const params = new URLSearchParams(url.search);
-    console.log(params);
-    twitter.twitterClient2
-      .getAccessToken({
-        oauth_token: params.get("oauth_token") || "",
-        oauth_verifier: params.get("oauth_verifier") || "",
-      })
-      .then((res) => {
-        console.log(res);
-        console.log({
-          accTkn: res.oauth_token,
-          accTknSecret: res.oauth_token_secret,
-          userId: res.user_id,
-          screenName: res.screen_name,
-        });
-      });
+  const oauth = getOauthParams(request);
+  if (oauth) {
+    const res = await twitter.twitterClient2.getAccessToken({
+      oauth_token: oauth.token,
+      oauth_verifier: oauth.verifier,
+    });
+    const user = await getOrCreateUser(res.user_id);
+    createSession({
+      userId: user.id,
+      oauthToken: res.oauth_token,
+      oauthTokenSecret: res.oauth_token_secret,
+    });
+    session.set("userId", user.id);
+    return redirect("/", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   }
 
   // Case 3 - coming directly, un-authenticated
