@@ -11,6 +11,7 @@ export async function getAllTweets(userId: number, query?: string) {
       userId: userId,
       body: {
         contains: query || "",
+        mode: "insensitive",
       },
     },
   });
