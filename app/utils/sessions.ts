@@ -1,9 +1,11 @@
-import { createCookieSessionStorage } from "@remix-run/server-runtime";
+import { createCookieSessionStorage } from "remix";
+import { getRequiredEnvVar } from "./misc";
 
 const { getSession, commitSession, destroySession } =
   createCookieSessionStorage({
     cookie: {
       name: "tweet_on_time_session",
+      secrets: [getRequiredEnvVar("SESSION_SECRET")],
 
       // all of these are optional
       // domain: "remix.run",
@@ -12,7 +14,6 @@ const { getSession, commitSession, destroySession } =
       // maxAge: 60,
       // path: "/",
       // sameSite: "lax",
-      // secrets: ["s3cret1"],
       // secure: true,
     },
   });

@@ -8,6 +8,9 @@ if (typeof process.env.CONSUMER_SECRET === "undefined") {
   throw new Error("Environment variable CONSUMER_SECRET must be set");
 }
 
+const CALLBACK_URL =
+  process.env.NODE_ENV === "production" ? "" : "http://localhost:3000/sign-in";
+
 export const twitterClient = new Twitter({
   subdomain: "api",
   version: "1.1",
@@ -26,6 +29,7 @@ export interface TwitterUser {
 
 export async function getUser() {
   const result = await twitterClient.get("account/verify_credentials");
+  console.log(result);
   return {
     name: result.name,
     screenName: result.screen_name,
@@ -44,8 +48,11 @@ export const twitterClient2 = new Twitter({
 });
 
 export async function getRequestToken() {
-  return twitterClient2.getRequestToken("http://localhost:3000").then((res) => {
-    console.log(res);
-    return res;
-  });
+  const token = await twitterClient2
+    .getRequestToken(CALLBACK_URL)
+    .then((res) => res);
+  if (token.oauth_callback_confirmed === "false") {
+    throw Error("could not get oauth token");
+  }
+  return token;
 }

@@ -20,9 +20,21 @@ model Tweet {
   userId    Int
 }
 
+model Session {
+  id               Int      @id @default(autoincrement())
+  createdAt        DateTime @default(now())
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           Int
+  expirationDate   DateTime
+  oauthToken       String
+  oauthTokenSecret String
+}
+
 model User {
-  id     Int     @id @default(autoincrement())
-  email  String  @unique
-  name   String?
-  tweets Tweet[]
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  name          String?
+  twitterUserId String    @unique
+  tweets        Tweet[]
+  sessions      Session[]
 }
