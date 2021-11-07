@@ -1,19 +1,20 @@
 import React from "react";
 import { useLoaderData } from "remix";
 import type { LinksFunction, LoaderFunction } from "remix";
-import { useTwitterUser } from "../../context/twitter-user";
 import { getTweet } from "../../utils/db";
 import stylesUrl from "../../../styles/routes/schedule/$id.css";
 import { protectedRoute } from "~/utils/misc";
+import { TwitterData } from "~/utils/twitter-client";
 
 export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
 };
 
 export let loader: LoaderFunction = async ({ params, request }) => {
-  return protectedRoute(request, ({ user }) =>
-    getTweet(user.id, parseInt(params.id || ""))
-  );
+  return protectedRoute(request, async ({ user }) => {
+    const tweet = await getTweet(user.id, parseInt(params.id || ""));
+    return { user: user.twitterData, tweet };
+  });
 };
 
 export default function ScheduledTweet() {
@@ -22,12 +23,12 @@ export default function ScheduledTweet() {
     <div className="w-full">
       <div className="w-full flex flex-row justify-between">
         <h1>Tweet</h1>
-        <p className="text-sm text-gray-400">
-          {data.tweetDate} at {data.tweetTime}
-        </p>
+        <p className="text-sm text-gray-400">{data.tweet.sendAt}</p>
       </div>
       <div className="mt-4">
-        <TweetBox more={data.threadLength > 1}>{data.body}</TweetBox>
+        <TweetBox more={false} user={data.user}>
+          {data.tweet.body}
+        </TweetBox>
       </div>
     </div>
   );
@@ -36,15 +37,15 @@ export default function ScheduledTweet() {
 type TweetBoxProps = {
   children: React.ReactNode;
   more?: boolean;
+  user: TwitterData;
 };
 
-function TweetBox({ children, more }: TweetBoxProps) {
-  const user = useTwitterUser();
+function TweetBox({ children, more, user }: TweetBoxProps) {
   return (
     <div className="flex flex-row">
       <div className="flex-none">
         <img
-          src={user?.profileImage}
+          src={user.profileImage}
           alt="Profile image"
           className="max-h-12 rounded-full"
         />
