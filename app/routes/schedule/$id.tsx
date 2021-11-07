@@ -1,10 +1,9 @@
 import React from "react";
-import { useLoaderData, redirect } from "remix";
+import { useLoaderData } from "remix";
 import type { LinksFunction, LoaderFunction } from "remix";
 import { useTwitterUser } from "../../context/twitter-user";
 import { getTweet } from "../../utils/db";
 import stylesUrl from "../../../styles/routes/schedule/$id.css";
-import { getSession } from "~/utils/sessions";
 import { protectedRoute } from "~/utils/misc";
 
 export let links: LinksFunction = () => {

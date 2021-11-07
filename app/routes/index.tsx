@@ -1,8 +1,7 @@
 import type { MetaFunction, LoaderFunction } from "remix";
-import { useLoaderData, Link, redirect } from "remix";
+import { useLoaderData, Link } from "remix";
 import { ArrowUp, WriteIcon } from "../components";
 import { getAllTweets } from "../utils/db";
-import { getSession } from "~/utils/sessions";
 import { protectedRoute } from "~/utils/misc";
 
 export let meta: MetaFunction = () => {
