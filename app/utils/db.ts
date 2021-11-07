@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import type { Prisma, Session, User } from "@prisma/client";
+import { getTwitterClient, verifyCredentials } from "./twitter-client";
 
 const prisma = new PrismaClient();
 
@@ -57,5 +58,14 @@ export async function getUserFromSessionId(sessionId: number) {
   if (!session) {
     throw new Error("No user was found");
   }
-  return session.user;
+  const user = session.user;
+  const twitterClient = getTwitterClient(user);
+  const twitterData = await verifyCredentials(twitterClient);
+  if (!twitterData) {
+    throw new Error("Twitter credentials could not be verified");
+  }
+  return {
+    ...user,
+    twitterData,
+  };
 }

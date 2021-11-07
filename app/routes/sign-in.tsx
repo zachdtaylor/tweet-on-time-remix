@@ -56,7 +56,7 @@ export let loader: LoaderFunction = async ({ request }) => {
       oauthToken: res.oauth_token,
       oauthTokenSecret: res.oauth_token_secret,
     });
-    session.signIn(user);
+    await session.signIn(user);
     return redirect("/", {
       headers: {
         "Set-Cookie": await session.commit(),

@@ -30,7 +30,7 @@ async function getSession(request: Request) {
   );
   const getSessionId = () => session.get(sessionIdKey) as number | undefined;
   const unsetSessionId = () => session.unset(sessionIdKey);
-  const commit = () => commitSession(session);
+  const commit = () => sessionStorage.commitSession(session);
   return {
     session,
     getSessionId,
