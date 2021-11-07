@@ -103,9 +103,9 @@ export default function Schedule() {
                     pathname: tweet.id.toString(),
                     search: location.search,
                   }}
-                  className={(isActive) =>
+                  className={({ isActive }) =>
                     `inline-block menu-item py-3 px-4 ${
-                      isActive && "bg-twitterblue"
+                      isActive ? "bg-twitterblue" : ""
                     }`
                   }
                 >

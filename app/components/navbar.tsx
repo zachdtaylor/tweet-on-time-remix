@@ -51,7 +51,7 @@ function NavBarItem(props: NavLinkProps) {
     <li className="py-4 border-b-2 md:mx-4 md:py-2 md:border-b-0 hover:text-primary-dark transition duration-200 ease-in-out">
       <NavLink
         {...props}
-        className={(isActive) =>
+        className={({ isActive }) =>
           `w-full text-md ${isActive && "border-b-2 border-white"}`
         }
       />
