@@ -1,6 +1,6 @@
 import { ActionFunction, Link, LinksFunction, redirect } from "remix";
-import stylesUrl from "../../../styles/routes/schedule/new.css";
-import { writeTweet } from "../../../utils/db";
+import stylesUrl from "../../styles/routes/schedule/new.css";
+import { writeTweet } from "../../utils/db";
 
 export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];

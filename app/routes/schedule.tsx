@@ -4,11 +4,13 @@ import {
   useLocation,
   useSearchParams,
 } from "react-router-dom";
+import type { Tweet } from "@prisma/client";
 import { LoaderFunction, LinksFunction, useTransition } from "remix";
-import { useLoaderData, Form } from "remix";
-import { getAllTweets } from "../../utils/db";
-import { LoadingTweetShimmer, WriteIcon } from "../../components";
+import { useLoaderData, Form, redirect } from "remix";
+import { getAllTweets } from "../utils/db";
+import { LoadingTweetShimmer, WriteIcon } from "../components";
 import stylesUrl from "../../styles/routes/schedule.css";
+import { getSession } from "~/utils/sessions";
 
 export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
@@ -21,13 +23,17 @@ function sleep(ms: number) {
 }
 
 export let loader: LoaderFunction = async ({ request }) => {
-  // await sleep(3000);
+  const session = await getSession(request);
+  const user = await session.getUser();
+  if (!user) {
+    return redirect("/sign-in");
+  }
   const search = new URLSearchParams(new URL(request.url).search);
-  return getAllTweets(search.get("query") ?? undefined);
+  return getAllTweets(user.id, search.get("query") ?? undefined);
 };
 
 export default function Schedule() {
-  const data = useLoaderData();
+  const data = useLoaderData<Tweet[]>();
   const location = useLocation();
   const [params] = useSearchParams();
   const transition = useTransition();
@@ -81,16 +87,17 @@ export default function Schedule() {
             data.map((tweet) => (
               <li key={tweet.id} className="my-2">
                 <NavLink
-                  to={{ pathname: tweet.id, search: location.search }}
+                  to={{
+                    pathname: tweet.id.toString(),
+                    search: location.search,
+                  }}
                   className={(isActive) =>
                     `inline-block menu-item py-3 px-4 ${
                       isActive && "bg-twitterblue"
                     }`
                   }
                 >
-                  <p className="text-xs pb-1">
-                    {tweet.tweetDate} {tweet.tweetTime}
-                  </p>
+                  <p className="text-xs pb-1">{tweet.sendAt}</p>
                   <p className="text-sm">{previewText(tweet.body)}</p>
                 </NavLink>
               </li>

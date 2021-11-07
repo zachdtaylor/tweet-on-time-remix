@@ -1,9 +1,8 @@
 import React from "react";
-import { useRouteData } from "remix";
+import { useLoaderData } from "remix";
 import type { LinksFunction, LoaderFunction } from "remix";
-import { useTwitterUser } from "../../../context/twitter-user";
-import type { ScheduledTweet } from "../../../utils/db";
-import { getTweet } from "../../../utils/db";
+import { useTwitterUser } from "../../context/twitter-user";
+import { getTweet } from "../../utils/db";
 import stylesUrl from "../../../styles/routes/schedule/$id.css";
 
 export let links: LinksFunction = () => {
@@ -15,7 +14,7 @@ export let loader: LoaderFunction = ({ params }) => {
 };
 
 export default function ScheduledTweet() {
-  const data = useRouteData<ScheduledTweet>();
+  const data = useLoaderData();
   return (
     <div className="w-full">
       <div className="w-full flex flex-row justify-between">
@@ -26,11 +25,6 @@ export default function ScheduledTweet() {
       </div>
       <div className="mt-4">
         <TweetBox more={data.threadLength > 1}>{data.body}</TweetBox>
-        {data.thread?.map(({ body }, index) => (
-          <TweetBox key={body} more={data.threadLength > index + 2}>
-            {body}
-          </TweetBox>
-        ))}
       </div>
     </div>
   );

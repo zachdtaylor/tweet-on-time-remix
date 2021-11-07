@@ -4,9 +4,10 @@ import { getTwitterClient, verifyCredentials } from "./twitter-client";
 
 const prisma = new PrismaClient();
 
-export async function getAllTweets(query?: string) {
+export async function getAllTweets(userId: number, query?: string) {
   return prisma.tweet.findMany({
     where: {
+      userId: userId,
       body: {
         contains: query || "",
       },
