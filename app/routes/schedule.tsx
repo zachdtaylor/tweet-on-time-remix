@@ -5,12 +5,24 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import type { Tweet } from "@prisma/client";
-import { LoaderFunction, LinksFunction, useTransition } from "remix";
+import {
+  LoaderFunction,
+  LinksFunction,
+  MetaFunction,
+  useTransition,
+} from "remix";
 import { useLoaderData, Form, redirect } from "remix";
 import { getAllTweets } from "../utils/db";
 import { LoadingTweetShimmer, WriteIcon } from "../components";
 import stylesUrl from "../../styles/routes/schedule.css";
 import { getSession } from "~/utils/sessions";
+
+export let meta: MetaFunction = () => {
+  return {
+    title: "Tweet on Time",
+    description: "Schedule your tweets.",
+  };
+};
 
 export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
