@@ -1,4 +1,11 @@
-import { ActionFunction, Link, LinksFunction, redirect } from "remix";
+import {
+  ActionFunction,
+  Link,
+  LinksFunction,
+  redirect,
+  useActionData,
+} from "remix";
+import { protectedRoute } from "~/utils/misc";
 import stylesUrl from "../../styles/routes/schedule/new.css";
 import { writeTweet } from "../../utils/db";
 
@@ -7,15 +14,25 @@ export let links: LinksFunction = () => {
 };
 
 export let action: ActionFunction = async ({ request }) => {
-  const body = new URLSearchParams(await request.text());
-  // writeTweet({
-  //   body: body.get("body") ?? "",
-  //   sendAt: new Date(2021, 0, 1, 12, 0, 0),
-  // });
-  return redirect("/schedule/new");
+  return protectedRoute(request, async ({ user }) => {
+    const body = new URLSearchParams(await request.text());
+    const date = body.get("tweetDate");
+    const time = body.get("tweetTime");
+    if (!date || !time) {
+      throw new Error("Date or time was undefined");
+    }
+    writeTweet({
+      body: body.get("body") ?? "",
+      sendAt: new Date(`${date}T${time}`),
+      userId: user.id,
+    });
+    return redirect("/schedule");
+  });
 };
 
 export default function New() {
+  const data = useActionData();
+  console.log(data);
   return (
     <div className="absolute z-10 top-0 left-0 w-full h-full lg:px-32 lg:py-24 bg-gray-600 bg-opacity-50">
       <div className="bg-primary p-6 rounded-md">

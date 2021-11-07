@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import type { Prisma, Session, User } from "@prisma/client";
+import type { Tweet, Session, User } from "@prisma/client";
 import { getTwitterClient, verifyCredentials } from "./twitter-client";
 import { Awaited } from "./types";
 
@@ -25,7 +25,9 @@ export async function getTweet(userId: number, id: number) {
   });
 }
 
-export async function writeTweet(tweet: Prisma.TweetCreateInput) {
+export async function writeTweet(
+  tweet: Omit<Tweet, "id" | "createdAt" | "updatedAt">
+) {
   return prisma.tweet.create({ data: tweet });
 }
 
