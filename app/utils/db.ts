@@ -48,3 +48,14 @@ export async function createSession(
     },
   });
 }
+
+export async function getUserFromSessionId(sessionId: number) {
+  const session = await prisma.session.findUnique({
+    where: { id: sessionId },
+    include: { user: true },
+  });
+  if (!session) {
+    throw new Error("No user was found");
+  }
+  return session.user;
+}

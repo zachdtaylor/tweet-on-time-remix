@@ -39,8 +39,8 @@ function getOauthParams(request: Request) {
 //   3. Coming directly, un-authenticated
 export let loader: LoaderFunction = async ({ request }) => {
   // Case 1 - coming directly, authenticated
-  const session = await getSession(request.headers.get("Cookie"));
-  if (session.has("userId")) {
+  const session = await getSession(request);
+  if (session.getSessionId()) {
     return redirect("/");
   }
 
@@ -56,13 +56,10 @@ export let loader: LoaderFunction = async ({ request }) => {
       oauthToken: res.oauth_token,
       oauthTokenSecret: res.oauth_token_secret,
     });
-    await createSession({
-      userId: user.id,
-    });
-    session.set("userId", user.id);
+    session.signIn(user);
     return redirect("/", {
       headers: {
-        "Set-Cookie": await commitSession(session),
+        "Set-Cookie": await session.commit(),
       },
     });
   }
