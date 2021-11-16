@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import type { Tweet, Session, User } from "@prisma/client";
 import { getTwitterClient, verifyCredentials } from "./twitter-client";
 import { Awaited } from "./types";
+import { encryptValue } from "./misc";
 
 const prisma = new PrismaClient();
 
@@ -38,8 +39,8 @@ export async function updateUserOauthData(userData: Omit<User, "id">) {
   return prisma.user.upsert({
     where: { twitterUserId: userData.twitterUserId },
     update: {
-      oauthToken: userData.oauthToken,
-      oauthTokenSecret: userData.oauthTokenSecret,
+      oauthToken: encryptValue(userData.oauthToken),
+      oauthTokenSecret: encryptValue(userData.oauthTokenSecret),
     },
     create: userData,
   });

@@ -1,6 +1,6 @@
 import Twitter from "twitter-lite";
 import type { User } from "@prisma/client";
-import { getRequiredEnvVar } from "./misc";
+import { decryptValue, getRequiredEnvVar } from "./misc";
 
 if (typeof process.env.CONSUMER_KEY === "undefined") {
   throw new Error("Environment variable CONSUMER_KEY must be set");
@@ -28,8 +28,8 @@ export function getTwitterClient(user: User) {
     version: "1.1",
     consumer_key: getRequiredEnvVar("CONSUMER_KEY"),
     consumer_secret: getRequiredEnvVar("CONSUMER_SECRET"),
-    access_token_key: user.oauthToken,
-    access_token_secret: user.oauthTokenSecret,
+    access_token_key: decryptValue(user.oauthToken),
+    access_token_secret: decryptValue(user.oauthTokenSecret),
   });
 }
 

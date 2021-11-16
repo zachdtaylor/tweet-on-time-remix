@@ -1,6 +1,6 @@
 import type { MetaFunction, LoaderFunction } from "remix";
 import { useLoaderData, Link } from "remix";
-import { ArrowUp, WriteIcon } from "../components";
+import { WriteIcon } from "../components";
 import { getAllTweets } from "../utils/db";
 import { protectedRoute } from "~/utils/misc";
 
@@ -27,11 +27,6 @@ export default function Index() {
         icon={<WriteIcon />}
         value={data.scheduledTweetCount}
         label="Scheduled Tweets"
-      />
-      <DashboardValueCard
-        value={data.tweetsSentThisWeek}
-        label="Tweets Sent This Week"
-        icon={<ArrowUp />}
       />
     </div>
   );
